@@ -71,3 +71,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+// todo 使用prisma替代typeorm
+//      利用cross-env解决跨平台脚本

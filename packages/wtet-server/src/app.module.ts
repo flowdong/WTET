@@ -7,16 +7,21 @@ import AppConfig from './config/common';
 import DatabaseConfig from './config/database';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+
+
+
 @Module({
   imports: [
     CommonModule,
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: process.env.NODE_ENV=='production' ?'.env.production':'.env.development',
       load: [AppConfig, DatabaseConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
+        console.log(DatabaseConfig());
         return {
           type: 'mysql',
           host: configService.get('database.host'), // 和nestjs中的概念结合起来
