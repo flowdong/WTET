@@ -75,3 +75,4 @@ Nest is [MIT licensed](LICENSE).
 
 // todo 使用prisma替代typeorm
 //      利用cross-env解决跨平台脚本
+// key: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

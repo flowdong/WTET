@@ -21,7 +21,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        console.log(DatabaseConfig());
+        //console.log(DatabaseConfig());
         return {
           type: 'mysql',
           host: configService.get('database.host'), // 和nestjs中的概念结合起来
