@@ -2,7 +2,7 @@
 import * as Path from 'path';
 import * as Log4js from 'log4js';
 import * as Util from 'util';
-import {format} from 'date-fns'; // 处理时间的工具
+import { format } from 'date-fns'; // 处理时间的工具
 import * as StackTrace from 'stacktrace-js';
 import Chalk from 'chalk';
 import config from '../config/log4js';

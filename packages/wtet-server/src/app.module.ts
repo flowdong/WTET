@@ -6,16 +6,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import AppConfig from './config/common';
 import DatabaseConfig from './config/database';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
-
-
-
+import { DipModule } from './dip/dip.module';
 @Module({
   imports: [
     CommonModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV=='production' ?'.env.production':'.env.development',
+      envFilePath:
+        process.env.NODE_ENV == 'production'
+          ? '.env.production'
+          : '.env.development',
       load: [AppConfig, DatabaseConfig],
     }),
     TypeOrmModule.forRootAsync({
@@ -35,6 +35,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       },
       inject: [ConfigService],
     }),
+    DipModule,
   ],
   controllers: [AppController],
   providers: [AppService],
