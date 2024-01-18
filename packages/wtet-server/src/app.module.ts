@@ -7,6 +7,8 @@ import AppConfig from './config/common';
 import DatabaseConfig from './config/database';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DipModule } from './dip/dip.module';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     CommonModule,
@@ -36,6 +38,8 @@ import { DipModule } from './dip/dip.module';
       inject: [ConfigService],
     }),
     DipModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -10,7 +10,7 @@ export class DipService {
   }
 
   findAll() {
-    return dip.stock.trading.getMin("sh600005");
+    return dip.stock.trading.getMin('sh600005');
   }
 
   findOne(id: number) {
