@@ -8,10 +8,10 @@ import { ValidationPipe } from './pipe/validation.pipe';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(new LoggerMiddleware().use);
-  app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new TransformInterceptor())
+  app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(3000);
 }

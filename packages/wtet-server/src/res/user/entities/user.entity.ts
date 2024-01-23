@@ -1,5 +1,5 @@
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { encryptPassword } from '../../utils/bcrypt';
+import { encryptPassword } from '../../../utils/bcrypt';
 
 @Entity('user')
 export class User {
@@ -15,10 +15,16 @@ export class User {
   @Column()
   password: string; // 密码
 
-  @Column()
-  avatar: string; //头像
+  @Column({
+    nullable: true,
+    default: () => null,
+  })
+  avatar?: string; //头像
 
-  @Column()
+  @Column({
+    nullable: true,
+    default: () => null,
+  })
   email: string;
 
   @Column('simple-enum', { enum: ['root', 'author', 'visitor'] })

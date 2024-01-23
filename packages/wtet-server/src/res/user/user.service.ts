@@ -35,7 +35,6 @@ export class UserService {
 
   async register(createUser: CreateUserDto) {
     const { username } = createUser;
-
     const existUser = await this.userRepository.findOne({
       where: { username },
     });

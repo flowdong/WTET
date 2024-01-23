@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../user/user.service';
+import { UserService } from '../res/user/user.service';
 import { comparePassword } from '../utils/bcrypt';
-import { User } from '../user/entities/user.entity';
+import { User } from '../res/user/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { CacheService } from '../cache/cache.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private jwtService: JwtService,
+    private cacheService: CacheService,
   ) {}
   async loginSingToken(loginParams) {
     const authResult = await this.validateUser(
@@ -71,6 +73,13 @@ export class AuthService {
     console.log('JWT验证 - Step 3: 处理 jwt 签证');
     try {
       const token = this.jwtService.sign(payload);
+      // 把token存储到redis中，如果这个用户下次还登录就把这个值更新了，载validate的时候看看能不能
+      // 找到原来的key的值没有就说明更新了就强制要求用户下线 于是这单点登录功能就完成了  ,过期时间和token一致
+      await this.cacheService.set(
+        `user-token-${user.id}-${user.username}`,
+        token,
+        60 * 60 * 8,
+      );
       return {
         code: 200,
         data: {

@@ -1,24 +1,27 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CommonModule } from './common/common.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import AppConfig from './config/common';
 import DatabaseConfig from './config/database';
+import RedisConfig from './config/redis';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DipModule } from './dip/dip.module';
-import { UserModule } from './user/user.module';
+import { UserModule } from './res/user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './guard/auth.guard';
+import { Job } from './job/job';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CacheModule } from './cache/cache.module';
 @Module({
   imports: [
-    CommonModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath:
         process.env.NODE_ENV == 'production'
           ? '.env.production'
           : '.env.development',
-      load: [AppConfig, DatabaseConfig],
+      load: [AppConfig, DatabaseConfig, RedisConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -37,11 +40,19 @@ import { AuthModule } from './auth/auth.module';
       },
       inject: [ConfigService],
     }),
-    DipModule,
+    ScheduleModule.forRoot(),
     UserModule,
     AuthModule,
+    CacheModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    //  Job,
+  ],
 })
 export class AppModule {}

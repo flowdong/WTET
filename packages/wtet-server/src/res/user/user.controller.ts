@@ -7,16 +7,19 @@ import {
   Param,
   Delete,
   UsePipes,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ValidationPipe } from '../pipe/validation.pipe';
-import { User } from './entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { SkipAuth } from '../../decorator/skip-auth.decorator';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
   //@UsePipes(new ValidationPipe())
@@ -26,12 +29,12 @@ export class UserController {
 
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return this.userService.findOne('12345');
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
   @Patch(':id')
@@ -43,7 +46,8 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
   }
-
+  @SkipAuth()
+  @UseGuards(AuthGuard('local'))
   @Post('register')
   register(@Body() createUser: CreateUserDto) {
     return this.userService.register(createUser);

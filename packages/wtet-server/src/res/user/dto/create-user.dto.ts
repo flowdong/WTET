@@ -6,14 +6,4 @@ export class CreateUserDto {
 
   @IsNotEmpty({ message: '密码不允许为空' })
   password: string;
-
-  @IsNotEmpty({ message: '更新创建时间必选' })
-  @IsNumber()
-  update_time: number;
-
-  @IsNotEmpty({ message: '创建时间必选' })
-  create_time: number;
-
-  @IsNotEmpty({ message: '状态必填' })
-  state: number;
 }
